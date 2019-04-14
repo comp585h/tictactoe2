@@ -18,7 +18,7 @@ class smartAI:
         if (self.Qtable.get((state, action))) is None: #if there is no q-value for that 
             self.Qtable[(state, action)] = 1.0
             
-        print("gettingQ: " + self.Qtable[(state,action)])
+        print("gettingQ: {}".format(self.Qtable[(state,action)]))
         return self.Qtable.get((state, action))
 
     def updateQ(self, reward, state, board):
@@ -29,13 +29,13 @@ class smartAI:
             q_list.append(self.getQ(tuple(state), moves))
         if q_list:
             max_q_next = max(q_list)
-            print("max_q_next: " + max_q_next)
+            print("max_q_next: {}".format(max_q_next))
         else:
             max_q_next=0.0
-            print("max_q_next: " + max_q_next)
+            print("max_q_next: {}".format(max_q_next))
 
         self.Qtable[self.lastStateAction] = self.lastQ + self.alpha * ((reward + self.gamma * max_q_next) - self.lastQ)
-        print("update Q: " + self.Qtable[self.lastStateAction])
+        print("update Q: {}".format(self.Qtable[self.lastStateAction]))
     def getMove(self, board):
         self.prevBoard = ''.join(board) #convert the array into string so that it can be used as a key to the dict Qtable
 
@@ -47,7 +47,7 @@ class smartAI:
             self.epsilon *= self.eps_decay
             self.lastStateAction = (self.prevBoard, move)
             self.lastQ = self.getQ(self.prevBoard, move)
-            print("getMove stats: epsilon: " + self.epsilon + " lastStateAction: " + self.lastStateAction + " lastQ: " + self.lastQ)
+            print("getMove stats: epsilon: {} lastStateAction: {} lastQ: {}".format(self.epsilon,self.lastStateAction, self.lastQ))
             return move #pick a random move from the possible moves
         else:
             print("not exploring")
@@ -66,7 +66,7 @@ class smartAI:
             self.epsilon *= self.eps_decay
             self.lastStateAction = (self.prevBoard, possibleMoves[i_move])
             self.lastQ = self.getQ(self.prevBoard, possibleMoves[i_move])
-            print("getMove stats: epsilon: " + self.epsilon + " lastStateAction: " + self.lastStateAction + " lastQ: " + self.lastQ)
+            print("getMove stats: epsilon: {} lastStateAction: {} lastQ: {}".format(self.epsilon,self.lastStateAction, self.lastQ))
             return possibleMoves[i_move]
 
     def saveQtable(self, file_name):
