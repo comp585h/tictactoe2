@@ -76,6 +76,9 @@ class Game:
                     break
                 else:
                     reward = 0
+                
+                state = ''.join(self.board)
+                self.smartai.updateQ(reward, state, self.board)
 
                 #then opponent
                 if not training:
@@ -101,6 +104,8 @@ class Game:
                 if not check == -1:
                     #opponent has won
                     reward = -1
+                    state = ''.join(self.board)
+                    self.smartai.updateQ(reward, state, self.board)
                     break
                 else:
                     #draw scenario
@@ -117,7 +122,14 @@ class Game:
                 check = self.checkForEnd('O', training)
                 if not check == -1:
                     reward = 1
+                    state = ''.join(self.board)
+                    self.smartai.updateQ(reward, state, self.board)
+
                     break
+                
+                state = ''.join(self.board)
+                self.smartai.updateQ(reward, state, self.board)
+
 
 def printBoard(board):
     print('   |   |')

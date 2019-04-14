@@ -19,9 +19,11 @@ class smartAI:
             self.Qtable[(state, action)] = 1.0
         return self.Qtable.get((state, action))
 
-    def updateQ(self, reward, state, possible_moves):
+    def updateQ(self, reward, state, board):
+        possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 9] 
+        
         q_list=[]
-        for moves in possible_moves:
+        for moves in possibleMoves:
             q_list.append(self.getQ(tuple(state), moves))
         if q_list:
             max_q_next = max(q_list)
