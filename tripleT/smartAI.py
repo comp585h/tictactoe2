@@ -35,7 +35,7 @@ class smartAI:
             print("max_q_next: " + max_q_next)
 
         self.Qtable[self.lastStateAction] = self.lastQ + self.alpha * ((reward + self.gamma * max_q_next) - self.lastQ)
-        print("update Q: " + self.Qtable[self.lastStateAction] = self.lastQ + self.alpha * ((reward + self.gamma * max_q_next) - self.lastQ))
+        print("update Q: " + self.Qtable[self.lastStateAction])
     def getMove(self, board):
         self.prevBoard = ''.join(board) #convert the array into string so that it can be used as a key to the dict Qtable
 
