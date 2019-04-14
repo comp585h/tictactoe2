@@ -65,6 +65,7 @@ class Game:
             while True:   
                 #player goes first
                 printBoard(self.board)
+                print("Player's move:")
                 move = self.smartai.getMove(self.board) #get the move from smartai
                 self.board[move] = 'X'
                 check = self.checkForEnd('X')
@@ -75,9 +76,8 @@ class Game:
                     reward = 0
 
                 #then opponent
-                print("Opponent's move:")
                 printBoard(self.board)
-                print('\n')
+                print("Opponent's move:")
                 opponentAction = self.opponent.getMove(self.board)
                 self.board[opponentAction] = 'O'
 
@@ -88,13 +88,12 @@ class Game:
         else:
             while True:
                 #opponent goes first
-                print("Opponent's move:")
                 printBoard(self.board)
-                print('\n')
+                print("Opponent's move:")
                 opponentAction = self.opponent.getMove(self.board)
-                self.board[opponentAction] = 'O'
+                self.board[opponentAction] = 'X'
                 
-                check = self.checkForEnd('O')
+                check = self.checkForEnd('X')
                 if not check == -1:
                     #opponent has won
                     reward = -1
@@ -105,11 +104,12 @@ class Game:
 
                 #then player
                 printBoard(self.board)
+                print("Player's move:")
                 move = self.smartai.getMove(self.board)
-                self.board[move] = 'X'
+                self.board[move] = 'O'
 
                 #check if game has ended
-                check = self.checkForEnd('X')
+                check = self.checkForEnd('O')
                 if not check == -1:
                     reward = 1
                     break

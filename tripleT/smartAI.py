@@ -27,7 +27,7 @@ class smartAI:
             max_q_next = max(q_list)
         else:
             max_q_next=0.0
-        self.Q[self.state_action_last] = self.q_last + self.alpha * ((reward + self.gamma*max_q_next) - self.q_last)
+        self.Q[self.state_action_last] = self.q_last + self.alpha * ((reward + self.gamma * max_q_next) - self.q_last)
 
     def getMove(self, board):
         self.prevBoard = ''.join(board) #convert the array into string so that it can be used as a key to the dict Qtable
@@ -55,7 +55,7 @@ class smartAI:
 
             self.epsilon *= self.eps_decay
             self.lastStateAction = (self.prevBoard, possibleMoves[i_move])
-            #self.lastQ = self.getQ(self.prevBoard, possibleMoves)
+            self.lastQ = self.getQ(self.prevBoard, possibleMoves[i_move])
             return possibleMoves[i_move]
 
     def saveQtable(self, file_name):
