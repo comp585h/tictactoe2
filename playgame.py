@@ -12,4 +12,16 @@ while (gamesplayed <= num_tgames):
     game = Game(opponent = opponent, smartai = agent) 
     game.play()
     gamesplayed += 1
-    
+
+stats = "smart {} dumb {} draw {}, winrate = {}, dumb winrate = {}"
+agentW = 0
+dumbW = 0
+draw = 0
+
+with open("./stats.txt",'r') as reading:
+    for i in reading:
+        agentW += int(i.split(" ")[0])
+        dumbW += int(i.split(" ")[1])
+        draw += int(i.split(" ")[2])
+total = agentW+dumbW+draw
+print(stats.format(agentW,dumbW,draw,agentW/total*100, dumbW/total*100))

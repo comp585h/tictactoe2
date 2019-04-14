@@ -59,7 +59,20 @@ class Game:
                 print("It's a draw!")
             return 0
         return -1
+    def checkStats():
+        stats = "smart {} dumb {} draw{}, winrate = {}"
+        agentW = 0
+        dumbW = 0
+        draw = 0
 
+        with open("./stats.txt",'a') as reading:
+            lines = reading.readlines()
+            for i in lines:
+                agentW += i.split(" ")[0]
+                dumbW += i.split(" ")[1]
+                draw += i.split(" ")[2]
+        total = agentW+dumbW+draw
+        print(stats.format(agentW,dumbW,draw,agentW/total*100))
     def play(self, training=True):
         #'Rolling of the dice' to decide who goes first
         if random.random() < 0.5:
@@ -73,6 +86,8 @@ class Game:
                 check = self.checkForEnd('X', training)
                 if not check == -1:
                     reward = 1
+                    with open("./stats.txt",'a') as reading:
+                        reading.write("1 0 0\n")
                     break
                 else:
                     reward = 0
@@ -88,8 +103,12 @@ class Game:
                 check = self.checkForEnd('O', training)
                 if not check == -1:
                     reward = -1
+                    with open("./stats.txt",'a') as reading:
+                        reading.write("0 1 0\n")
                     break
-
+                else:
+                    with open("./stats.txt",'a') as reading:
+                        reading.write("0 0 1\n")
                 self.smartai.updateQ(reward, state, self.board)
 
         else:
