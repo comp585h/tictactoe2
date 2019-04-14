@@ -70,8 +70,8 @@ class smartAI:
             return possibleMoves[i_move]
 
     def saveQtable(self, file_name):
-        with open(file_name, 'wb') as handle:
-            pickle.dump(self.Qtable, handle, protocol = pickle.HIGHEST_PROTOCOL)
+        with open(file_name, 'ab') as handle:
+            pickle.dump(self.Qtable, handle) #, protocol = pickle.HIGHEST_PROTOCOL
 
     def loadQtable(self, file_name):
         with open(file_name, 'rb') as handle:

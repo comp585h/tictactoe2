@@ -6,13 +6,13 @@ opponent = DumbAI()
 agent = smartAI(0.5, 0.01, 0.33, 0.99)
 num_tgames = 5000
 gamesplayed = 0
-
+agent.loadQtable("./qTable.pickle")
 while (gamesplayed <= num_tgames):
     #number of training sessions
     game = Game(opponent = opponent, smartai = agent) 
     game.play()
     gamesplayed += 1
-
+agent.saveQtable("./qTable.pickle")
 stats = "smart {} dumb {} draw {}, winrate = {}, dumb winrate = {}"
 agentW = 0
 dumbW = 0
