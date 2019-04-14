@@ -27,7 +27,7 @@ class Game:
         #Use count method to see if letter is present 3 times
         if a.count(letter) == 3 or b.count(letter) == 3:
             return True
-        
+
         #Then check for row/column win possibilities
         for i in range(3):
             col = [board[0 + i], board[3 + i], board[6 + i]]
@@ -43,73 +43,81 @@ class Game:
                 return False
         return True
 
-    def checkForEnd(self, letter):
+    def checkForEnd(self, letter, training):
         #Returns -1 if still continuing, 0 if draw, and 1 if a player has won
         #Check first if victorious, then draw
         if self.checkForWin(letter, self.board):
-            printBoard(self.board)
+            if not training:
+                printBoard(self.board)
             if letter == 'X':
-                print("Player 1 wins!")
+                if not training:
+                    print("Player 1 wins!")
             else:
-                print("Opponent wins!")
+                if not training:
+                    print("Opponent wins!")
             return 1
         if self.checkForDraw():
-            printBoard(self.board)
-            print("It's a draw!")
+            if not training:
+                printBoard(self.board)
+                print("It's a draw!")
             return 0
         return -1
-        
-    def play(self):
+
+    def play(self, training=True):
         #'Rolling of the dice' to decide who goes first
-        if random.random() < 0.5: 
-            while True:   
+        if random.random() < 0.5:
+            while True:
                 #player goes first
-                printBoard(self.board)
-                print("Player's move:")
+                if not training:
+                    printBoard(self.board)
+                    print("Player's move:")
                 move = self.smartai.getMove(self.board) #get the move from smartai
                 self.board[move] = 'X'
-                check = self.checkForEnd('X')
+                check = self.checkForEnd('X', training)
                 if not check == -1:
                     reward = 1
                     break
-                else: 
+                else:
                     reward = 0
 
                 #then opponent
-                printBoard(self.board)
-                print("Opponent's move:")
+                if not training:
+                    printBoard(self.board)
+                    print("Opponent's move:")
                 opponentAction = self.opponent.getMove(self.board)
                 self.board[opponentAction] = 'O'
 
-                check = self.checkForEnd('O')
+                check = self.checkForEnd('O', training)
                 if not check == -1:
                     reward = -1
                     break
         else:
             while True:
                 #opponent goes first
-                printBoard(self.board)
-                print("Opponent's move:")
+                if not training:
+                    printBoard(self.board)
+                    print("Opponent's move:")
                 opponentAction = self.opponent.getMove(self.board)
                 self.board[opponentAction] = 'X'
-                
-                check = self.checkForEnd('X')
+
+                check = self.checkForEnd('X', training)
                 if not check == -1:
                     #opponent has won
                     reward = -1
                     break
-                else: 
+                else:
                     #draw scenario
                     reward = 0
 
                 #then player
-                printBoard(self.board)
-                print("Player's move:")
+                if not training:
+                    printBoard(self.board)
+                    print("Player's move:")
                 move = self.smartai.getMove(self.board)
                 self.board[move] = 'O'
 
                 #check if game has ended
-                check = self.checkForEnd('O')
+                check = self.checkForEnd('O', training)
                 if not check == -1:
                     reward = 1
                     break
@@ -126,5 +134,3 @@ def printBoard(board):
     print('   |   |')
     print(' ' + board[6] + ' | ' + board[7] + ' | ' + board[8])
     print('   |   |')
-
-    
