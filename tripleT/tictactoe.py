@@ -14,10 +14,7 @@ class Game:
         # ----------
         # 6 | 7 | 8
         self.board = [' ' for x in range(9)]
-
-    def makeMove(letter, pos):
-        board[pos] = letter
-
+        
     def checkForWin(self, letter, board):
         #has board as additional input as we call this in the opponent AI class--have to pass along board information
         #First check for diagonals
