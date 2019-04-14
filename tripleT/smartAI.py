@@ -21,7 +21,7 @@ class smartAI:
 
     def updateQ(self, reward, state, board):
         possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 9] 
-        
+
         q_list=[]
         for moves in possibleMoves:
             q_list.append(self.getQ(tuple(state), moves))

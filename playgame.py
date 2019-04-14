@@ -12,3 +12,4 @@ while (gamesplayed <= num_tgames):
     game = Game(opponent = opponent, smartai = agent) 
     game.play()
     gamesplayed += 1
+    
