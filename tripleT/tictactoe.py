@@ -87,6 +87,7 @@ class Game:
                 if not check == -1:
                     reward = 1
                     with open("./stats.txt",'a') as reading:
+                        print("smart AI won")
                         reading.write("1 0 0\n")
                     break
                 else:
@@ -104,10 +105,12 @@ class Game:
                 if not check == -1:
                     reward = -1
                     with open("./stats.txt",'a') as reading:
+                        print("opponent won")
                         reading.write("0 1 0\n")
                     break
                 else:
                     with open("./stats.txt",'a') as reading:
+                        print("draw")
                         reading.write("0 0 1\n")
                 self.smartai.updateQ(reward, state, self.board)
 
