@@ -10,7 +10,7 @@ agent.loadQtable("./qTable.pickle")
 while (gamesplayed <= num_tgames):
     #number of training sessions
     game = Game(opponent = opponent, smartai = agent) 
-    game.play()
+    game.play(training=False)
     gamesplayed += 1
 agent.saveQtable("./qTable.pickle")
 stats = "smart {} dumb {} draw {}, winrate = {}, dumb winrate = {}"
