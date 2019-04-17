@@ -8,7 +8,8 @@ class smartAI:
         self.gamma = gamma #discount rate
         self.epsilon = epsilon #exploration rate
         self.eps_decay = eps_decay #how quickly to slow down exploration rate; multiplied with the epsilon each round (should be 1 > x > 0)
-        self.Qtable = {} #the Q-table
+        self.Qtable = {} #the Q-table; dictionary of (state, action) -> Q-value
+        self.pastMoves= [] #a list of all past states
 
         self.prevBoard = None 
         self.lastStateAction = None
@@ -22,20 +23,26 @@ class smartAI:
         return self.Qtable.get((state, action))
 
     def updateQ(self, reward, state, board):
+        #take care of adding the made move into list of past moves
+        self.pastMoves.insert(0, self.lastStateAction)
+
         possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 9] 
 
         q_list=[]
         for moves in possibleMoves:
             q_list.append(self.getQ(tuple(state), moves))
         if q_list:
-            max_q_next = max(q_list)
+            max_q_next = max(q_list) #max from list of q values of possible moves
             print("max_q_next: {}".format(max_q_next))
         else:
             max_q_next=0.0
             print("max_q_next: {}".format(max_q_next))
-
-        self.Qtable[self.lastStateAction] = self.lastQ + self.alpha * ((reward + self.gamma * max_q_next) - self.lastQ)
+        
+        #Updates the Q-value for all past moves
+        for list_index in range(len(self.pastMoves)):
+            self.Qtable[self.pastMoves[list_index]] += self.alpha * ((reward + (self.gamma**(list_index + 1)) * max_q_next) - self.Qtable[self.pastMoves[list_index]]) #updates Q's starting from most recent move to least recent move
         print("update Q: {}".format(self.Qtable[self.lastStateAction]))
+
     def getMove(self, board):
         self.prevBoard = ''.join(board) #convert the array into string so that it can be used as a key to the dict Qtable
 

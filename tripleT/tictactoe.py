@@ -73,7 +73,11 @@ class Game:
                 draw += i.split(" ")[2]
         total = agentW+dumbW+draw
         print(stats.format(agentW,dumbW,draw,agentW/total*100))
+
     def play(self, training=True):
+        self.smartai.pastMoves = [] #have to reset pastmoves array with each new game
+        self.smartai.lastStateAction = None
+
         #'Rolling of the dice' to decide who goes first
         if random.random() < 0.5:
             while True:
@@ -89,6 +93,7 @@ class Game:
                     with open("./stats.txt",'a') as reading:
                         print("smart AI won")
                         reading.write("1 0 0\n")
+                        state = ''.join(self.board)
                     break
                 else:
                     reward = 0
