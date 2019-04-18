@@ -6,7 +6,7 @@ class Game:
         #you can plug in another opponent AI class--all that is required is that it has a getMove() method
         self.opponent = opponent
         self.smartai = smartai
-
+        self.winresult = -999
         #game board is a simple array of positions 0 to 8, where the n-th number in array matches to the positions on the tic tac toe board like:
         # 0 | 1 | 2
         # ----------
@@ -88,6 +88,7 @@ class Game:
                     reward = 1
                     with open("./stats.txt",'a') as reading:
                         # print("smart AI won")
+                        self.winresult = 1
                         reading.write("1 0 0\n")
                     break
                 else:
@@ -106,11 +107,13 @@ class Game:
                     reward = -1
                     with open("./stats.txt",'a') as reading:
                         # print("opponent won")
+                        self.winresult = -1
                         reading.write("0 1 0\n")
                     break
                 else:
                     with open("./stats.txt",'a') as reading:
                         # print("draw")
+                        self.winresult = 0
                         reading.write("0 0 1\n")
                 self.smartai.updateQ(reward, state, self.board)
 
