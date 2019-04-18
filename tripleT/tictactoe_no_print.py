@@ -46,19 +46,20 @@ class Game:
         if self.checkForWin(letter, self.board):
             if not training:
                 printBoard(self.board)
-            # if letter == 'X':
-            #     if not training:
-                    # print("Player 1 wins!")
-            # else:
-            #     if not training:
-                    # print("Opponent wins!")
+            if letter == 'X':
+                if not training:
+                    print("Player 1 wins!")
+            else:
+                if not training:
+                    print("Player 2 wins!")
             return 1
         if self.checkForDraw():
             if not training:
                 printBoard(self.board)
-                # print("It's a draw!")
+                print("It's a draw!")
             return 0
         return -1
+
     def checkStats():
         stats = "smart {} dumb {} draw{}, winrate = {}"
         agentW = 0
@@ -72,87 +73,128 @@ class Game:
                 dumbW += i.split(" ")[1]
                 draw += i.split(" ")[2]
         total = agentW+dumbW+draw
-        # print(stats.format(agentW,dumbW,draw,agentW/total*100))
+        print(stats.format(agentW,dumbW,draw,agentW/total*100))
+
     def play(self, training=True):
+        self.smartai.pastMoves = [] #have to reset pastmoves array with each new game
+        self.smartai.lastStateAction = None
+
         #'Rolling of the dice' to decide who goes first
         if random.random() < 0.5:
             while True:
                 #player goes first
                 if not training:
                     printBoard(self.board)
-                    # print("Player's move:")
+                    print("Player's move:")
+
                 move = self.smartai.getMove(self.board) #get the move from smartai
                 self.board[move] = 'X'
-                check = self.checkForEnd('X', training)
-                if not check == -1:
+                state = ''.join(self.board)
+
+                check = self.checkForEnd('X', training) #check if move has ended the game
+                if check == 1: #game ended--player won
                     reward = 1
                     with open("./stats.txt",'a') as reading:
-                        # print("smart AI won")
-                        self.winresult = 1
+                        #print("smart AI won")
                         reading.write("1 0 0\n")
+                    self.winresult = 1
                     break
-                else:
+                elif check == 0: #game ended--draw
                     reward = 0
-                state = ''.join(self.board)
+                    with open("./stats.txt",'a') as reading:
+                        #rint("draw")
+                        reading.write("0 0 1\n")
+                    self.winresult = 0
+                    break
+
+                #if game has not ended
+                reward = 0
 
                 #then opponent
                 if not training:
                     printBoard(self.board)
-                    # print("Opponent's move:")
+                    #print("Opponent's move:")
+
                 opponentAction = self.opponent.getMove(self.board)
                 self.board[opponentAction] = 'O'
 
                 check = self.checkForEnd('O', training)
-                if not check == -1:
+                if check == 1:
                     reward = -1
                     with open("./stats.txt",'a') as reading:
-                        # print("opponent won")
-                        self.winresult = -1
+                        #print("opponent won")
                         reading.write("0 1 0\n")
+                    self.winresult = -1
                     break
-                else:
+                elif check == 0:
                     with open("./stats.txt",'a') as reading:
-                        # print("draw")
-                        self.winresult = 0
+                        #rint("draw")
                         reading.write("0 0 1\n")
-                self.smartai.updateQ(reward, state, self.board)
+                    self.winresult = 0
+                    break
 
+                #update the Q-values if game still continuing
+                self.smartai.updateQ(reward, state, self.board)
+            #update the Q-value after game has finished
+            self.smartai.updateQ(reward, state, self.board)
         else:
             while True:
                 #opponent goes first
                 if not training:
                     printBoard(self.board)
-                    # print("Opponent's move:")
+                    #print("Opponent's move:")
                 opponentAction = self.opponent.getMove(self.board)
                 self.board[opponentAction] = 'X'
 
                 check = self.checkForEnd('X', training)
-                if not check == -1:
+                if check == 1:
                     #opponent has won
                     reward = -1
-                    state = ''.join(self.board)
+                    with open("./stats.txt",'a') as reading:
+                        #print("opponent won")
+                        reading.write("0 1 0\n")
+                    self.winresult = -1
                     break
-                else:
+                elif check == 0:
                     #draw scenario
                     reward = 0
+                    with open("./stats.txt",'a') as reading:
+                       #print("draw")
+                       reading.write("0 0 1\n")
+                    self.winresult = 0
+                    break
 
                 #then player
                 if not training:
                     printBoard(self.board)
-                    # print("Player's move:")
+                    print("Player's move:")
+
                 move = self.smartai.getMove(self.board)
                 self.board[move] = 'O'
+                state = ''.join(self.board)
+                reward = 0
 
                 #check if game has ended
                 check = self.checkForEnd('O', training)
-                if not check == -1:
+                if check == 1: #then player has won
                     reward = 1
+                    with open("./stats.txt",'a') as reading:
+                        #print("smart AI won")
+                        reading.write("1 0 0\n")
+                    self.winresult = 1
                     break
-                
-                state = ''.join(self.board)
+                elif check == 0:
+                    reward = 0
+                    with open("./stats.txt",'a') as reading:
+                        #print("draw")
+                        reading.write("0 0 1\n")
+                    self.winresult = 0
+                    break
+                    
+                #update the q-values if game is still continuing
                 self.smartai.updateQ(reward, state, self.board)
-
-        self.smartai.updateQ(reward, state, self.board)
+            #update the q-values after game has finished
+            self.smartai.updateQ(reward, state, self.board)
 
 
 
