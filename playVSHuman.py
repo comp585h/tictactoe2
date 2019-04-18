@@ -4,7 +4,7 @@ from tripleT.smartAI import smartAI
 from tripleT.humanPlayer import Human
 
 opponent = Human()
-agent = smartAI(0.5, 0.01, 0.33, 0.99)
+agent = smartAI(0.5, 0.01, 0.0, 0.99)
 num_tgames = 5000
 gamesplayed = 0
 agent.loadQtable("./qTable.pickle")

@@ -19,7 +19,7 @@ class smartAI:
         if (self.Qtable.get((state, action))) is None: #if there is no q-value for that 
             self.Qtable[(state, action)] = 1.0
             
-        print("gettingQ: {}".format(self.Qtable[(state,action)]))
+        #print("gettingQ: {}".format(self.Qtable[(state,action)]))
         return self.Qtable.get((state, action))
 
     def updateQ(self, reward, state, board):
@@ -29,35 +29,35 @@ class smartAI:
         possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 9] 
 
         q_list=[]
-        for moves in possibleMoves:
+        for moves in possibleMoves: #get q values for this new state of the board
             q_list.append(self.getQ(tuple(state), moves))
         if q_list:
             max_q_next = max(q_list) #max from list of q values of possible moves
-            print("max_q_next: {}".format(max_q_next))
+            #print("max_q_next: {}".format(max_q_next))
         else:
             max_q_next=0.0
-            print("max_q_next: {}".format(max_q_next))
+            #print("max_q_next: {}".format(max_q_next))
         
         #Updates the Q-value for all past moves
         for list_index in range(len(self.pastMoves)):
             self.Qtable[self.pastMoves[list_index]] += self.alpha * ((reward + (self.gamma**(list_index + 1)) * max_q_next) - self.Qtable[self.pastMoves[list_index]]) #updates Q's starting from most recent move to least recent move
-        print("update Q: {}".format(self.Qtable[self.lastStateAction]))
+        #print("update Q: {}".format(self.Qtable[self.lastStateAction]))
 
     def getMove(self, board):
         self.prevBoard = ''.join(board) #convert the array into string so that it can be used as a key to the dict Qtable
 
         possibleMoves = [x for x, letter in enumerate(board) if letter == ' ' and x != 9] 
         if random.random() < self.epsilon:
-            print("exploring")
+            #print("exploring")
             #Explore
             move = possibleMoves[random.randint(0, len(possibleMoves) - 1)]
             self.epsilon *= self.eps_decay
             self.lastStateAction = (self.prevBoard, move)
             self.lastQ = self.getQ(self.prevBoard, move)
-            print("getMove stats: epsilon: {} lastStateAction: {} lastQ: {}".format(self.epsilon,self.lastStateAction, self.lastQ))
+            #print("getMove stats: epsilon: {} lastStateAction: {} lastQ: {}".format(self.epsilon,self.lastStateAction, self.lastQ))
             return move #pick a random move from the possible moves
         else:
-            print("not exploring")
+            #print("not exploring")
             Qlist = []
 
             #find the maximum Q-value for that board state and all the possible moves
@@ -73,7 +73,7 @@ class smartAI:
             self.epsilon *= self.eps_decay
             self.lastStateAction = (self.prevBoard, possibleMoves[i_move])
             self.lastQ = self.getQ(self.prevBoard, possibleMoves[i_move])
-            print("getMove stats: epsilon: {} lastStateAction: {} lastQ: {}".format(self.epsilon,self.lastStateAction, self.lastQ))
+            #print("getMove stats: epsilon: {} lastStateAction: {} lastQ: {}".format(self.epsilon,self.lastStateAction, self.lastQ))
             return possibleMoves[i_move]
 
     def saveQtable(self, file_name):
