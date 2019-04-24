@@ -1,19 +1,24 @@
-from tripleT.tictactoe import Game
+from tripleT.tictactoe_no_print import Game
 from tripleT.dumbAI import DumbAI
-from tripleT.smartAI import smartAI
+from tripleT.smartAI_no_print import smartAI
 from tripleT.humanPlayer import Human
 
+
+alpha = 0.7
+gamma = 0.01
+epsilon = 0.59
+eps_decay = 0.999
+
 opponent = Human()
-agent = smartAI(0.5, 0.01, 0.0, 0.99)
-num_tgames = 5000
-gamesplayed = 0
-agent.loadQtable("./qTable.pickle")
+agent = smartAI(alpha, gamma, epsilon, eps_decay)
+print("alpha = {}, gamma = {}, epsilon = {}, eps_decay = {}".format(alpha,gamma,epsilon,eps_decay))
+
+agent.loadQtable("./qTable1.pickle")
 end = False
 while (not end):
     #number of training sessions
     game = Game(opponent = opponent, smartai = agent) 
     game.play(training=False)
-    gamesplayed += 1
 # agent.saveQtable("./qTable.pickle")
 # stats = "smart {} dumb {} draw {}, winrate = {}, dumb winrate = {}"
 # agentW = 0
