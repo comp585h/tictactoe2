@@ -12,7 +12,7 @@ eps_decay = 0.999
 opponent = DumbAI(randomness)
 agent = smartAI(alpha, gamma, epsilon, eps_decay)
 
-num_tgames = 1000000
+num_tgames = 1000
 gamesplayed = 0 
 
 print("num of game = {}, randomness = {}, alpha = {}, gamma = {}, epsilon = {}, eps_decay = {}".format(num_tgames,randomness,alpha,gamma,epsilon,eps_decay))
@@ -20,7 +20,7 @@ agentW = 0
 dumbW = 0
 draw = 0
 
-# agent.loadQtable("./qTable1.pickle")
+agent.loadQtable("./qTable1.pickle")
 while (gamesplayed <= num_tgames):
     #number of training sessions
     game = Game(opponent = opponent, smartai = agent) 
@@ -32,7 +32,7 @@ while (gamesplayed <= num_tgames):
         dumbW += 1
     elif game.winresult == 0:
         draw += 1
-# agent.saveQtable("./qTable1.pickle")
+agent.saveQtable("./qTable1.pickle")
 
 stats = "smart {} dumb {} draw {}, winrate = {}, dumb winrate = {}"
 total = agentW + dumbW + draw
