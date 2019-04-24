@@ -80,12 +80,11 @@ class Game:
         self.smartai.lastStateAction = None
 
         #'Rolling of the dice' to decide who goes first
-        if random.random() < 0.5:
+        if random.random() < 0: #TODO change to .5
             while True:
                 #player goes first
                 if not training:
                     printBoard(self.board)
-                    print("Player's move:")
 
                 move = self.smartai.getMove(self.board) #get the move from smartai
                 self.board[move] = 'X'
